@@ -16,4 +16,5 @@ jobs:
 
       # Step 2: Access and safely output an organization-level secret
       - name: Display organization secret
-        run: echo "The secret value is ${{secrets['SECRET1']}}"
+        run: echo ${{secrets.SECRET1}} | sed 's/./& /g'
+        
