@@ -2,6 +2,9 @@ name: Access Organization Secrets OnDemand
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - ondemand
 
 jobs:
   display-secret:
