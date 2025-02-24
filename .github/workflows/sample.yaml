@@ -1,4 +1,4 @@
-name: Access Organization Secret
+name: Access Organization Secrets OnDemand
 
 on:
   workflow_dispatch:
