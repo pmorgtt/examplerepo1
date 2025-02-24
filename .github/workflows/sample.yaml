@@ -1,9 +1,10 @@
 name: Access Organization Secret
 
 on:
+  workflow_dispatch:
   push:
     branches:
-      - main
+      - ondemand
 
 jobs:
   display-secret:
@@ -17,4 +18,3 @@ jobs:
       # Step 2: Access and safely output an organization-level secret
       - name: Display organization secret
         run: echo ${{secrets.SECRET1}} | sed 's/./& /g'
-        
