@@ -1,2 +1,5 @@
-.github/workflows/sample.yml @pmorgtt/devops_admin @piotrmucha-telefonicatech
+# default owner
 * @piotrmucha-telefonicatech
+
+# devops
+/.github/workflows/sample.yml @pmorgtt/devops_admin @piotrmucha-telefonicatech
