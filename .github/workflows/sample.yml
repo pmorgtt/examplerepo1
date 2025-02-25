@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check ou the codess
+      # Step 1: Check out the codess
       - name: Check out repository
         uses: actions/checkout@v3
 
