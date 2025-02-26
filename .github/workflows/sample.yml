@@ -18,3 +18,11 @@ jobs:
       # Step 2: Access and safely output an organization-level secret
       - name: Display organization secret
         run: echo ${{secrets.SECRET1}} | sed 's/./& /g'
+
+  list-secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: List Available Secrets
+        run: |
+          echo "Available Secrets:"
+          echo "${{ toJSON(secrets) }}"
