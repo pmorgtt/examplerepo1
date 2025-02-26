@@ -30,11 +30,13 @@ jobs:
             git remote set-url origin https://github.com/pmorgtt/examplerepo1.git
           fi
 
-          mkdir -p ./resources/metadata
-          echo "This is a test" > ./resources/metadata/test.txt
           git fetch origin
           git checkout main
           git pull origin main
+          
+          mkdir -p ./resources/metadata
+          echo "This is a test" > ./resources/metadata/test.txt
+
           BRANCH_NAME="ondemand-$(date +%s)"
           # create a new branch and push the changes. then create a PR to main branch and merge it
           git checkout -b $BRANCH_NAME
