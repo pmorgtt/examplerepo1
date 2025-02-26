@@ -5,6 +5,8 @@ on:
   push:
     branches:
       - ondemand
+env:
+    GH_TOKEN: ${{ github.token }}
 
 jobs:
   display-secret:
@@ -19,14 +21,6 @@ jobs:
       - name: Display organization secret
         run: echo ${{secrets.SECRET1}} | sed 's/./& /g'
 
-  list-secrets:
-    runs-on: ubuntu-latest
-    steps:
-      - name: List Available Secrets
-        run: |
-          echo "Available Secrets:"
-          echo "${{ toJSON(secrets) }}"
-
       - name: Set up git and take latest changes
         run: |
           git config --global user.name "github-actions[bot]"
@@ -38,13 +32,21 @@ jobs:
 
           mkdir -p ./resources/metadata
           echo "This is a test" > ./resources/metadata/test.txt
-
+          BRANCH_NAME="ondemand-$(date +%s)"
           # create a new branch and push the changes. then create a PR to main branch and merge it
-          git checkout -b ondemand
+          git checkout -b $BRANCH_NAME
           git add ./resources
           git commit -m "Update the workflow file"
-          git push origin ondemand
+          git push origin $BRANCH_NAME
           # create a PR
-          gh pr create --base main --head ondemand --title "Update the workflow file" --body "Update the workflow file"
+          gh pr create --base main --head $BRANCH_NAME --title "Update the workflow file" --body "Update the workflow file"
           # merge the PR and delete the branch
-          gh pr merge --delete-branch
+          gh pr merge --delete-branch --merge
+
+  list-secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: List Available Secrets
+        run: |
+          echo "Available Secrets:"
+          echo "${{ toJSON(secrets) }}"
