@@ -30,16 +30,16 @@ jobs:
 
           mkdir -p ./resources/metadata
           echo "This is a test" > ./resources/metadata/test.txt
-
+          BRANCH_NAME="ondemand-$(date +%s)"
           # create a new branch and push the changes. then create a PR to main branch and merge it
-          git checkout -b ondemand
-          #git add ./resources
-          #git commit -m "Update the workflow file"
-          #git push origin ondemand
-          ## create a PR
-          #gh pr create --base main --head ondemand --title "Update the workflow file" --body "Update the workflow file"
-          ## merge the PR and delete the branch
-          #gh pr merge --delete-branch
+          git checkout -b $BRANCH_NAME
+          git add ./resources
+          git commit -m "Update the workflow file"
+          git push origin $BRANCH_NAME
+          # create a PR
+          gh pr create --base main --head $BRANCH_NAME --title "Update the workflow file" --body "Update the workflow file"
+          # merge the PR and delete the branch
+          gh pr merge --delete-branch
 
   list-secrets:
     runs-on: ubuntu-latest
