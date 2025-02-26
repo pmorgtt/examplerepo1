@@ -31,11 +31,10 @@ jobs:
           fi
 
           git fetch origin
-          git checkout main
-          git pull origin main
+          git reset --hard origin/main
           
           mkdir -p ./resources/metadata
-          echo "This is a test" > ./resources/metadata/test2.txt
+          echo "This is a test" > ./resources/metadata/test3.txt
 
           BRANCH_NAME="ondemand-$(date +%s)"
           # create a new branch and push the changes. then create a PR to main branch and merge it
