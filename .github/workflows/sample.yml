@@ -34,7 +34,7 @@ jobs:
           git reset --hard origin/main
           
           mkdir -p ./resources/metadata
-          echo "This is a test" > ./resources/metadata/test3.txt
+          echo "This is a test" > ./resources/metadata/test4.txt
 
           BRANCH_NAME="ondemand-$(date +%s)"
           # create a new branch and push the changes. then create a PR to main branch and merge it
