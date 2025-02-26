@@ -41,7 +41,7 @@ jobs:
 
           # create a new branch and push the changes. then create a PR to main branch and merge it
           git checkout -b ondemand
-          git add ./resources
+          #git add ./resources
           #git commit -m "Update the workflow file"
           #git push origin ondemand
           ## create a PR
