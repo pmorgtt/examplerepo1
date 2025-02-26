@@ -35,7 +35,7 @@ jobs:
           git pull origin main
           
           mkdir -p ./resources/metadata
-          echo "This is a test" > ./resources/metadata/test.txt
+          echo "This is a test" > ./resources/metadata/test2.txt
 
           BRANCH_NAME="ondemand-$(date +%s)"
           # create a new branch and push the changes. then create a PR to main branch and merge it
