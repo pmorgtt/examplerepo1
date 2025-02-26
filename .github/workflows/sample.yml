@@ -41,7 +41,7 @@ jobs:
           # create a PR
           gh pr create --base main --head $BRANCH_NAME --title "Update the workflow file" --body "Update the workflow file"
           # merge the PR and delete the branch
-          gh pr merge --delete-branch --merge --squash --auto
+          gh pr merge --delete-branch --merge --auto
 
   list-secrets:
     runs-on: ubuntu-latest
