@@ -40,12 +40,16 @@ jobs:
           # create a new branch and push the changes. then create a PR to main branch and merge it
           git checkout -b $BRANCH_NAME
           git add ./resources
-          git commit -m "Update the workflow file"
-          git push origin $BRANCH_NAME
-          # create a PR
-          gh pr create --base main --head $BRANCH_NAME --title "Update the workflow file" --body "Update the workflow file"
-          # merge the PR and delete the branch
-          gh pr merge --delete-branch --merge
+          if git diff-index --quiet HEAD; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update the workflow file"
+            git push origin $BRANCH_NAME
+            # create a PR
+            gh pr create --base main --head $BRANCH_NAME --title "Update the workflow file" --body "Update the workflow file"
+            # merge the PR and delete the branch
+            gh pr merge --delete-branch --merge
+          fi
 
   list-secrets:
     runs-on: ubuntu-latest
