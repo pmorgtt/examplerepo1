@@ -6,7 +6,7 @@ on:
     branches:
       - ondemand
 env:
-    GH_TOKEN: ${{ github.token }}
+    GH_TOKEN: ${{ secrets.GH_PAT }}
 
 jobs:
   display-secret:
