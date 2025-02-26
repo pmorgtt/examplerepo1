@@ -33,7 +33,8 @@ jobs:
           mkdir -p ./resources/metadata
           echo "This is a test" > ./resources/metadata/test.txt
           git fetch origin
-          git reset --hard origin/main
+          git checkout main
+          git pull origin main
           BRANCH_NAME="ondemand-$(date +%s)"
           # create a new branch and push the changes. then create a PR to main branch and merge it
           git checkout -b $BRANCH_NAME
