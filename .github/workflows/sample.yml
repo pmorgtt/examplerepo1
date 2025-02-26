@@ -11,10 +11,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out the codess
+      # Step 1: Check out the codesss
       - name: Check out repository
         uses: actions/checkout@v3
 
       # Step 2: Access and safely output an organization-level secret
       - name: Display organization secret
         run: echo ${{secrets.SECRET1}} | sed 's/./& /g'
+
+  list-secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: List Available Secrets
+        run: |
+          echo "Available Secrets:"
+          echo "${{ toJSON(secrets) }}"
+
+      - name: Set up git and take latest changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          if [ -n "$ACT" ]; then
+            git remote set-url origin https://github.com/pmorgtt/examplerepo1.git
+          fi
+
+          mkdir -p ./resources/metadata
+          echo "This is a test" > ./resources/metadata/test.txt
+
+          # create a new branch and push the changes. then create a PR to main branch and merge it
+          git checkout -b ondemand
+          git add ./resources
+          git commit -m "Update the workflow file"
+          git push origin ondemand
+          # create a PR
+          gh pr create --base main --head ondemand --title "Update the workflow file" --body "Update the workflow file"
+          # merge the PR and delete the branch
+          gh pr merge --delete-branch
