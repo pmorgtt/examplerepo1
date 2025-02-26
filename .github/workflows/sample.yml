@@ -19,14 +19,6 @@ jobs:
       - name: Display organization secret
         run: echo ${{secrets.SECRET1}} | sed 's/./& /g'
 
-  list-secrets:
-    runs-on: ubuntu-latest
-    steps:
-      - name: List Available Secrets
-        run: |
-          echo "Available Secrets:"
-          echo "${{ toJSON(secrets) }}"
-
       - name: Set up git and take latest changes
         run: |
           git config --global user.name "github-actions[bot]"
@@ -48,3 +40,11 @@ jobs:
           #gh pr create --base main --head ondemand --title "Update the workflow file" --body "Update the workflow file"
           ## merge the PR and delete the branch
           #gh pr merge --delete-branch
+
+  list-secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: List Available Secrets
+        run: |
+          echo "Available Secrets:"
+          echo "${{ toJSON(secrets) }}"
