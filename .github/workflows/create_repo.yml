@@ -11,15 +11,11 @@ on:
     branches:
       - ondemand
 env:
-    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    GH_TOKEN: ${{ secrets.GH_PAT }}
 
 jobs:
   display-secret:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      repository-projects: write
-      pull-requests: write
 
     steps:
       # Step 1: Check out the codesss
