@@ -34,10 +34,10 @@ jobs:
             echo "::error::Repository `${{ env.TARGET_REPO }}` doesn't exists. Creating the repository first..."
             echo "repo_present=false" >> $GITHUB_OUTPUT
           fi
-
-          echo "repo_present=true" >> $GITHUB_OUTPUT
-          echo "::notice::Found Repository $REPO_NAME. Exiting..."
-          exit 1
+          else
+            echo "repo_present=true" >> $GITHUB_OUTPUT
+            echo "::notice::Found Repository $REPO_NAME. Exiting..."
+            exit 1
 
       - name: Create repo
         run: |
