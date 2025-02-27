@@ -31,13 +31,13 @@ jobs:
           echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
 
           if ! gh repo view "$ORG/$REPO_NAME" > /dev/null 2>&1; then
-            echo "::error::Repository `${{ env.TARGET_REPO }}` doesn't exists. Creating the repository first..."
+            echo "::error::Repository $REPO_NAME doesn't exist. Creating the repository first..."
             echo "repo_present=false" >> $GITHUB_OUTPUT
-          fi
           else
             echo "repo_present=true" >> $GITHUB_OUTPUT
             echo "::notice::Found Repository $REPO_NAME. Exiting..."
             exit 1
+          fi
 
       - name: Create repo
         run: |
