@@ -26,17 +26,18 @@ jobs:
         id: repo-check
         run: |
           ORG=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
-          REPO_FULL_NAME="$ORG/${{ inputs.new_repository_name }}"
-          echo "REPO_FULL_NAME=$REPO_FULL_NAME" >> $GITHUB_ENV
+          REPO_NAME="$ORG/${{ inputs.new_repository_name }}"
+          echo "ORG=$ORG" >> $GITHUB_ENV
+          echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
 
           echo "repo_present=true" >> $GITHUB_OUTPUT
-          echo "::notice::Found Repository $REPO_FULL_NAME."
+          echo "::notice::Found Repository $REPO_NAME."
           exit 0
 
       - name: init repo
         run: |
-          gh repo create "$REPO_FULL_NAME" --private
-          echo "::notice::Created repository `${{ inputs.new_repository_name }}` from template `${{ env.TEMPLATE_REPO }}`"
+          gh repo create "$ORG/$REPO_NAME" --private
+          echo "::notice::Created repository `$REPO_NAME`"
           # create empty main branch on the new repo
 
       - name: Set id for git commit
@@ -47,11 +48,11 @@ jobs:
       - name: Initialize and push empty main branch
         run: |
           git init
-          git checkout -b main
+          git remote add origin "https://$GH_TOKEN@github.com/$ORG/$REPO_NAME.git"
           git commit --allow-empty -m "Initial empty commit"
-          git remote add origin https://github.com/$REPO_FULL_NAME.git
+          git branch -M main
           git push -u origin main
 
       - name: Show branches
         run: |
-          gh api repos/$REPO_FULL_NAME/branches --jq '.[].name'
+          gh api repos/$ORG/$REPO_NAME/branches --jq '.[].name'
