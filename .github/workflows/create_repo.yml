@@ -73,7 +73,7 @@ jobs:
         id: repo-check
         run: |      
           if ! gh repo view "$ORG/$REPO_NAME" > /dev/null 2>&1; then
-            echo "::error::Repository $REPO_NAME doesn't exist. Creating the repository first..."
+            echo "::notice::Repository $REPO_NAME doesn't exist. Creating the repository first..."
             echo "repo_present=false" >> $GITHUB_OUTPUT
           else
             echo "repo_present=true" >> $GITHUB_OUTPUT
