@@ -37,7 +37,7 @@ jobs:
       - name: init repo
         run: |
           gh repo create "$ORG/$REPO_NAME" --private
-          echo "::notice::Created repository `$REPO_NAME`"
+          echo "::notice::Created repository $REPO_NAME"
           # create empty main branch on the new repo
 
       - name: Set id for git commit
@@ -47,6 +47,8 @@ jobs:
 
       - name: Initialize and push empty main branch
         run: |
+          mkdir new_repo
+          cd new_repo 
           git init
           git remote add origin "https://$GH_TOKEN@github.com/$ORG/$REPO_NAME.git"
           git commit --allow-empty -m "Initial empty commit"
