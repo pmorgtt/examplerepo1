@@ -28,7 +28,8 @@ jobs:
       - name: Check for existing repo
         id: repo-check
         run: |
-          ORG=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
+          $ORG=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
+          echo "$ORG"
 
           echo "repo_present=true" >> $GITHUB_OUTPUT
           echo "::notice::Found Repository ${{ inputs.new_repository_name }}."
