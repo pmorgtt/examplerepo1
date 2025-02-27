@@ -1,9 +1,9 @@
 {
     "id": 1900697,
-    "name": "Protect develop",
+    "name": "Protect main",
     "target": "branch",
     "source_type": "Repository",
-    "source": "pmorgtt/examplerepo1",
+    "source": "org/repo_name",
     "enforcement": "active",
     "conditions": {
       "ref_name": {

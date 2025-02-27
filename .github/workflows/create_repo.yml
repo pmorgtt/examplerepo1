@@ -30,15 +30,19 @@ jobs:
           echo "ORG=$ORG" >> $GITHUB_ENV
           echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
 
-          echo "repo_present=true" >> $GITHUB_OUTPUT
-          echo "::notice::Found Repository $REPO_NAME."
-          exit 0
+          if ! gh repo view "$ORG/$REPO_NAME" > /dev/null 2>&1; then
+            echo "::error::Repository `${{ env.TARGET_REPO }}` doesn't exists. Creating the repository first..."
+            echo "repo_present=false" >> $GITHUB_OUTPUT
+          fi
 
-      - name: init repo
+          echo "repo_present=true" >> $GITHUB_OUTPUT
+          echo "::notice::Found Repository $REPO_NAME. Exiting..."
+          exit 1
+
+      - name: Create repo
         run: |
           gh repo create "$ORG/$REPO_NAME" --private
           echo "::notice::Created repository $REPO_NAME"
-          # create empty main branch on the new repo
 
       - name: Set id for git commit
         run: |
@@ -55,6 +59,16 @@ jobs:
           git branch -M main
           git push -u origin main
 
-      - name: Show branches
+      - name: Update protect_main.json file
         run: |
-          gh api repos/$ORG/$REPO_NAME/branches --jq '.[].name'
+          curl -O https://raw.githubusercontent.com/${{ github.repository }}/newbranch2/branch_rules/protect_main.json
+          cat protect_main.json | jq '.source = $ORG/$REPO_NAME' > protect_main_insert.json
+
+      - name: Apply rule set for '$REPO_NAME'
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/$ORG/$REPO_NAME/rulesets \
+            --input protect_main_insert.json
