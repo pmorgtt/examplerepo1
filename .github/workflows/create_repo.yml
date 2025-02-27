@@ -28,7 +28,7 @@ jobs:
       - name: Check for existing repo
         id: repo-check
         run: |
-          $ORG=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
+          ORG=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
           echo "ORG: $ORG"
 
           echo "repo_present=true" >> $GITHUB_OUTPUT
