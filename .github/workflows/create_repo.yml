@@ -62,7 +62,7 @@ jobs:
       - name: Update protect_main.json file
         run: |
           curl -O https://raw.githubusercontent.com/${{ github.repository }}/newbranch2/branch_rules/protect_main.json
-          cat protect_main.json | jq '.source = $ORG/$REPO_NAME' > protect_main_insert.json
+          jq --arg ORG "$ORG" --arg REPO_NAME "$REPO_NAME" '.source = "\($ORG)/\($REPO_NAME)"' protect_main.json > protect_main_insert.json
 
       - name: Apply rule set for '$REPO_NAME'
         run: |
