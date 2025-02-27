@@ -70,6 +70,7 @@ jobs:
     
   create-repo:
     runs-on: ubuntu-latest
+    needs: create-gh-teams
 
     steps:
       - name: Check out repository
