@@ -37,6 +37,7 @@ jobs:
 
       - name: init repo
         run: |
+          ORG=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
           gh repo create "$ORG/${{ inputs.new_repository_name }}" --private
 
       - name: Set id for git commit
