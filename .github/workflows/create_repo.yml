@@ -1,4 +1,4 @@
-name: Access Organization Secrets OnDemand
+name: CreateNewRepo
 
 on:
   workflow_dispatch:
@@ -29,7 +29,7 @@ jobs:
         id: repo-check
         run: |
           $ORG=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
-          echo "$ORG"
+          echo "ORG: $ORG"
 
           echo "repo_present=true" >> $GITHUB_OUTPUT
           echo "::notice::Found Repository ${{ inputs.new_repository_name }}."
