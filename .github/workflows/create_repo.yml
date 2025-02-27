@@ -30,19 +30,12 @@ jobs:
         run: |
           ORG=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
 
-          if ! gh repo view "$ORG/${{ inputs.new_repository_name }}" > /dev/null 2>&1; then
-            echo "::error::Repository `${{ inputs.new_repository_name }}` doesn't exists - can't reset. Please create the repository first."
-            echo "repo_present=false" >> $GITHUB_OUTPUT
-            exit 1
-          fi
-
           echo "repo_present=true" >> $GITHUB_OUTPUT
           echo "::notice::Found Repository ${{ inputs.new_repository_name }}."
           exit 0
 
       - name: init repo
         run: |
-          ORG=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
           gh repo create "$ORG/${{ inputs.new_repository_name }}" --private
 
       - name: Set id for git commit
