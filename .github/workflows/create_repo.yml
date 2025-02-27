@@ -26,7 +26,7 @@ jobs:
         id: repo-check
         run: |
           ORG=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
-          REPO_NAME="$ORG/${{ inputs.new_repository_name }}"
+          REPO_NAME="${{ inputs.new_repository_name }}"
           echo "ORG=$ORG" >> $GITHUB_ENV
           echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
 
