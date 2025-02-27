@@ -112,13 +112,13 @@ jobs:
         run: |
           wget -qO- https://astral.sh/uv/install.sh | sh
           export PATH=$HOME/.local/bin:$PATH
-          git clone https://github.com/lsc-sde-crates/cr8tor.git@pzm-add-orchestration-feature
+          git clone -b pzm-add-orchestration-feature https://github.com/lsc-sde-crates/cr8tor.git
           uv sync --directory cr8tor
 
       - name: Run cr8tor CLI
         run: |
           source cr8tor/.venv/bin/activate
-          cr8tor init -t https://github.com/lsc-sde-crates/cr8-cookiecutter@feature-pzm-update-resources --project-name $REPO_NAME
+          cr8tor init -t https://github.com/lsc-sde-crates/cr8tor/tree/pzm-add-orchestration-feature --project-name $REPO_NAME
 
       - name: Initialize and push empty main branch
         run: |
