@@ -112,7 +112,6 @@ jobs:
         run: |
           wget -qO- https://astral.sh/uv/install.sh | sh
           export PATH=$HOME/.local/bin:$PATH
-          source .venv/bin/activate
           git clone https://github.com/lsc-sde-crates/cr8tor.git@pzm-add-orchestration-feature
           uv sync --directory cr8tor
 
