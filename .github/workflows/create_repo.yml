@@ -39,6 +39,11 @@ jobs:
           echo "::notice::Created repository `${{ inputs.new_repository_name }}` from template `${{ env.TEMPLATE_REPO }}`"
           # create empty main branch on the new repo
 
+      - name: Set id for git commit
+        run: |
+          git config --global user.name "LSCSDE Governance Actions"
+          git config --global user.email "lscsde-actions@github.com"
+
       - name: Initialize and push empty main branch
         run: |
           git init
@@ -46,11 +51,6 @@ jobs:
           git commit --allow-empty -m "Initial empty commit"
           git remote add origin https://github.com/$REPO_FULL_NAME.git
           git push -u origin main
-
-      - name: Set id for git commit
-        run: |
-          git config --global user.name "LSCSDE Governance Actions"
-          git config --global user.email "lscsde-actions@github.com"
 
       - name: Show branches
         run: |
