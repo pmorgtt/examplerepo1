@@ -1,4 +1,4 @@
-name: CreateNewDARrepo
+name: Create new DAR project repo
 
 on:
   workflow_dispatch:
