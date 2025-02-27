@@ -1,4 +1,4 @@
-name: CreateNewRepo
+name: CreateNewDARrepo
 
 on:
   workflow_dispatch:
@@ -14,7 +14,7 @@ env:
     GH_TOKEN: ${{ secrets.GH_PAT }}
 
 jobs:
-  display-secret:
+  create-dar-repo:
     runs-on: ubuntu-latest
 
     steps:
