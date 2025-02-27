@@ -22,14 +22,56 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
-      - name: Check for existing repo
-        id: repo-check
+      - name: Check for existing GH Contributor Team
+        id: team-check-contributor
         run: |
           ORG=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
           REPO_NAME="${{ inputs.new_repository_name }}"
-          echo "ORG=$ORG" >> $GITHUB_ENV
           echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
+          echo "ORG=$ORG" >> $GITHUB_ENV
 
+          TEAM_NAME="$REPO_NAME-contributor"
+          if gh api /orgs/$ORG/teams/$TEAM_NAME > /dev/null 2>&1; then
+            echo "team_present=true" >> $GITHUB_OUTPUT
+            echo "::notice::Found Team $TEAM_NAME. Skipping creation..."
+          else
+            echo "team_present=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create GH Contributor Team
+        if: steps.team-check-contributor.outputs.team_present == 'false'
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /orgs/$ORG/teams \
+            -f "name=$REPO_NAME-contributor" -f "description=Team for contributor members for project $REPO_NAME" -f "permission=push" -f "notification_setting=notifications_enabled" -f "privacy=closed"
+      
+      - name: Check for existing GH approver Team
+        id: team-check-approver
+        run: |
+          TEAM_NAME="$REPO_NAME-approver"
+          if gh api /orgs/$ORG/teams/$TEAM_NAME > /dev/null 2>&1; then
+            echo "team_present=true" >> $GITHUB_OUTPUT
+            echo "::notice::Found Team $TEAM_NAME. Skipping creation..."
+          else
+            echo "team_present=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create GH approver Team
+        if: steps.team-check-approver.outputs.team_present == 'false'
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /orgs/$ORG/teams \
+            -f "name=$REPO_NAME-approver" -f "description=Team for approver members for project $REPO_NAME" -f "permission=push" -f "notification_setting=notifications_enabled" -f "privacy=closed"
+
+      - name: Check for existing repo
+        id: repo-check
+        run: |      
           if ! gh repo view "$ORG/$REPO_NAME" > /dev/null 2>&1; then
             echo "::error::Repository $REPO_NAME doesn't exist. Creating the repository first..."
             echo "repo_present=false" >> $GITHUB_OUTPUT
@@ -39,36 +81,13 @@ jobs:
             exit 1
           fi
 
-      - name: Check for existing team
-        id: team-check
-        run: |
-          ORG=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
-          TEAM_NAME="$REPO_NAME-contributor"
-          if gh api /orgs/$ORG/teams/$TEAM_NAME > /dev/null 2>&1; then
-            echo "team_present=true" >> $GITHUB_OUTPUT
-            echo "::notice::Found Team $TEAM_NAME. Skipping creation..."
-          else
-            echo "team_present=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Create GitHub Team for the project $REPO_NAME
-        if: steps.team-check.outputs.team_present == 'false'
-        run: |
-          gh api \
-            --method POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            /orgs/$ORG/teams \
-            -f "name=$REPO_NAME-contributor" -f "description=Team for contributor members for project $REPO_NAME" -f "permission=push" -f "notification_setting=notifications_enabled" -f "privacy=closed"
-
       - name: Create repo
         run: |
           gh repo create "$ORG/$REPO_NAME" --public --team $REPO_NAME-contributor \
             --description "Data Access Request repository for project $REPO_NAME"
           echo "::notice::Created repository $REPO_NAME"
 
-      - name: Set id for git commit
-        run: |
+          # Set id for git commit
           git config --global user.name "LSCSDE Governance Actions"
           git config --global user.email "lscsde-actions@github.com"
 
