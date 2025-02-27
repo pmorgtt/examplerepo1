@@ -76,6 +76,11 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
+      - name: Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.12
+
       - name: Check for existing repo
         id: repo-check
         run: |
@@ -103,10 +108,22 @@ jobs:
           git config --global user.name "LSCSDE Governance Actions"
           git config --global user.email "lscsde-actions@github.com"
 
+      - name: Cr8tor Env
+        run: |
+          wget -qO- https://astral.sh/uv/install.sh | sh
+          export PATH=$HOME/.local/bin:$PATH
+          source .venv/bin/activate
+          git clone https://github.com/lsc-sde-crates/cr8tor.git@pzm-add-orchestration-feature
+          uv sync --directory cr8tor
+
+      - name: Run cr8tor CLI
+        run: |
+          source cr8tor/.venv/bin/activate
+          cr8tor init -t https://github.com/lsc-sde-crates/cr8-cookiecutter@feature-pzm-update-resources --project-name $REPO_NAME
+
       - name: Initialize and push empty main branch
         run: |
-          mkdir new_repo
-          cd new_repo 
+          cd $REPO_NAME 
           git init
           git remote add origin "https://$GH_TOKEN@github.com/$ORG/$REPO_NAME.git"
           git commit --allow-empty -m "Initial empty commit"
