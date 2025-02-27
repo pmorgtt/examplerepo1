@@ -14,11 +14,10 @@ env:
     GH_TOKEN: ${{ secrets.GH_PAT }}
 
 jobs:
-  create-dar-repo:
+  create-gh-teams:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out the codesss
       - name: Check out repository
         uses: actions/checkout@v3
 
@@ -68,10 +67,22 @@ jobs:
             -H "X-GitHub-Api-Version: 2022-11-28" \
             /orgs/$ORG/teams \
             -f "name=$REPO_NAME-approver" -f "description=Team for approver members for project $REPO_NAME" -f "permission=push" -f "notification_setting=notifications_enabled" -f "privacy=closed"
+    
+  create-repo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
 
       - name: Check for existing repo
         id: repo-check
-        run: |      
+        run: |
+          ORG=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
+          REPO_NAME="${{ inputs.new_repository_name }}"
+          echo "REPO_NAME=$REPO_NAME" >> $GITHUB_ENV
+          echo "ORG=$ORG" >> $GITHUB_ENV      
+          
           if ! gh repo view "$ORG/$REPO_NAME" > /dev/null 2>&1; then
             echo "::notice::Repository $REPO_NAME doesn't exist. Creating the repository first..."
             echo "repo_present=false" >> $GITHUB_OUTPUT
