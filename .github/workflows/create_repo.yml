@@ -39,7 +39,20 @@ jobs:
             exit 1
           fi
 
+      - name: Check for existing team
+        id: team-check
+        run: |
+          ORG=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
+          TEAM_NAME="$REPO_NAME-contributor"
+          if gh api /orgs/$ORG/teams/$TEAM_NAME > /dev/null 2>&1; then
+            echo "team_present=true" >> $GITHUB_OUTPUT
+            echo "::notice::Found Team $TEAM_NAME. Skipping creation..."
+          else
+            echo "team_present=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create GitHub Team for the project $REPO_NAME
+        if: steps.team-check.outputs.team_present == 'false'
         run: |
           gh api \
             --method POST \
