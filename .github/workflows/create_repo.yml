@@ -41,7 +41,7 @@ jobs:
 
       - name: Create repo
         run: |
-          gh repo create "$ORG/$REPO_NAME" --private
+          gh repo create "$ORG/$REPO_NAME" --public
           echo "::notice::Created repository $REPO_NAME"
 
       - name: Set id for git commit
