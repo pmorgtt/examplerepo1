@@ -50,9 +50,7 @@ jobs:
 
       - name: Create repo
         run: |
-          mkdir empty_folder
-          cd empty_folder 
-          gh repo create "$ORG/$REPO_NAME" --public --team $REPO_NAME-contributor --source=empty_folder --remote=upstream \
+          gh repo create "$ORG/$REPO_NAME" --public --team $REPO_NAME-contributor \
             --description "Data Access Request repository for project $REPO_NAME"
           echo "::notice::Created repository $REPO_NAME"
 
@@ -61,15 +59,15 @@ jobs:
           git config --global user.name "LSCSDE Governance Actions"
           git config --global user.email "lscsde-actions@github.com"
 
-      #- name: Initialize and push empty main branch
-      #  run: |
-      #    mkdir new_repo
-      #    cd new_repo 
-      #    git init
-      #    git remote add origin "https://$GH_TOKEN@github.com/$ORG/$REPO_NAME.git"
-      #    git commit --allow-empty -m "Initial empty commit"
-      #    git branch -M main
-      #    git push -u origin main
+      - name: Initialize and push empty main branch
+        run: |
+          mkdir new_repo
+          cd new_repo 
+          git init
+          git remote add origin "https://$GH_TOKEN@github.com/$ORG/$REPO_NAME.git"
+          git commit --allow-empty -m "Initial empty commit"
+          git branch -M main
+          git push -u origin main
 
       - name: Update protect_main.json file
         run: |
