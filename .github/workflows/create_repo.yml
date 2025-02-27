@@ -118,11 +118,11 @@ jobs:
       - name: Run cr8tor CLI
         run: |
           source cr8tor/.venv/bin/activate
-          cr8tor init -t https://github.com/lsc-sde-crates/cr8-cookiecutter/tree/feature-pzm-update-resources --project-name $REPO_NAME
+          cr8tor init -t https://github.com/lsc-sde-crates/cr8-cookiecutter/
 
       - name: Initialize and push empty main branch
         run: |
-          cd $REPO_NAME 
+          cd cr8-cr8tor-demo-project 
           git init
           git remote add origin "https://$GH_TOKEN@github.com/$ORG/$REPO_NAME.git"
           git commit --allow-empty -m "Initial empty commit"
