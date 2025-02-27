@@ -39,9 +39,20 @@ jobs:
             exit 1
           fi
 
+      - name: Create GitHub Team for the project $REPO_NAME
+        run: |
+          gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /orgs/$ORG/teams \
+            -f "name=$REPO_NAME-contributor" -f "description=Team for contributor members for project $REPO_NAME" -f "permission=push" -f "notification_setting=notifications_enabled" -f "privacy=closed"
+
       - name: Create repo
         run: |
-          gh repo create "$ORG/$REPO_NAME" --public
+          mkdir empty_folder
+          cd empty_folder 
+          gh repo create "$ORG/$REPO_NAME" --public --team $REPO_NAME-contributor
           echo "::notice::Created repository $REPO_NAME"
 
       - name: Set id for git commit
@@ -64,7 +75,7 @@ jobs:
           curl -O https://raw.githubusercontent.com/${{ github.repository }}/newbranch2/branch_rules/protect_main.json
           jq --arg ORG "$ORG" --arg REPO_NAME "$REPO_NAME" '.source = "\($ORG)/\($REPO_NAME)"' protect_main.json > protect_main_insert.json
 
-      - name: Apply rule set for '$REPO_NAME'
+      - name: Apply rule set for $REPO_NAME
         run: |
           gh api \
             --method POST \
