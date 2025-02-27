@@ -53,7 +53,7 @@ jobs:
           mkdir empty_folder
           cd empty_folder 
           gh repo create "$ORG/$REPO_NAME" --public --team $REPO_NAME-contributor --source=empty_folder --remote=upstream \
-            --description "Data Access Request repository for project $REPO_NAME" "
+            --description "Data Access Request repository for project $REPO_NAME"
           echo "::notice::Created repository $REPO_NAME"
 
       - name: Set id for git commit
